@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/kooroshh/fiber-boostrap/app/models"
 	"github.com/kooroshh/fiber-boostrap/pkg/env"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -26,5 +27,11 @@ func SetupDatabase() {
 		os.Exit(1)
 	}
 	DB.Logger = logger.Default.LogMode(logger.Info)
-	// DB.AutoMigrate(&models.User{})
+
+	err = DB.AutoMigrate(&models.User{}, &models.UserSession{})
+	if err != nil {
+		log.Fatal("failed to migrate database: ", err)
+	}
+
+	fmt.Println("successfully migrate database")
 }
