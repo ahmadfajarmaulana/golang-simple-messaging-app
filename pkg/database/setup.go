@@ -5,8 +5,9 @@ import (
 	"log"
 	"os"
 
-	"github.com/kooroshh/fiber-boostrap/app/models"
-	"github.com/kooroshh/fiber-boostrap/pkg/env"
+	"simple-messaging-app/app/models"
+	"simple-messaging-app/pkg/env"
+
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"

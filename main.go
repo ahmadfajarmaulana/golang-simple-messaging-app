@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/kooroshh/fiber-boostrap/bootstrap"
-	"github.com/kooroshh/fiber-boostrap/pkg/env"
+	"simple-messaging-app/bootstrap"
+	"simple-messaging-app/pkg/env"
 )
 
 func main() {
