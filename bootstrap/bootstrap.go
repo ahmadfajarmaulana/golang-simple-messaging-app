@@ -1,6 +1,7 @@
 package bootstrap
 
 import (
+	"simple-messaging-app/app/ws"
 	"simple-messaging-app/pkg/database"
 	"simple-messaging-app/pkg/env"
 	"simple-messaging-app/pkg/router"
@@ -20,6 +21,7 @@ func NewApplication() *fiber.App {
 	app.Use(recover.New())
 	app.Use(logger.New())
 	app.Get("/dashboard", monitor.New())
+	go ws.ServeWSMessaging(app)
 	router.InstallRouter(app)
 
 	return app
