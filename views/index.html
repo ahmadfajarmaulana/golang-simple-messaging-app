@@ -104,9 +104,8 @@
   </div>
 
   <div id="dashboard">
-    <h2>Welcome to the simple messaging app!</h2>
+    <h2>Welcome to the simple messaging app! <span id="fullname"></span></h2>
     <button onclick="logout()">Logout</button>
-    
     <!-- Chat Box (Full Size) -->
     <div id="chat-box">
       <ul id="messages">
@@ -341,6 +340,7 @@
     // Function to show the dashboard
     function showDashboard() {
       document.getElementById('login-form').style.display = 'none';
+      document.getElementById('fullname').innerText = sessionStorage.getItem('fullname');
       document.getElementById('dashboard').style.display = 'flex';
     }
   </script>
