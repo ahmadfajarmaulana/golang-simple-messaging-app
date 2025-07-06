@@ -36,7 +36,7 @@ func SetupDatabase() {
 		log.Fatal("failed to migrate database: ", err)
 	}
 
-	fmt.Println("successfully migrate database")
+	log.Println("successfully migrate database")
 }
 
 func SetupMongoDB() {
@@ -49,5 +49,5 @@ func SetupMongoDB() {
 
 	coll := client.Database("message").Collection("message_history")
 	MongoDB = coll
-	fmt.Println("successfully connect to mongodb")
+	log.Println("successfully connect to mongodb")
 }

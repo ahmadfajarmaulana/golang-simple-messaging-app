@@ -1,6 +1,9 @@
 package bootstrap
 
 import (
+	"io"
+	"log"
+	"os"
 	"simple-messaging-app/app/ws"
 	"simple-messaging-app/pkg/database"
 	"simple-messaging-app/pkg/env"
@@ -15,6 +18,7 @@ import (
 
 func NewApplication() *fiber.App {
 	env.SetupEnvFile()
+	SetuoLogFile()
 	database.SetupDatabase()
 	database.SetupMongoDB()
 	engine := html.New("./views", ".html")
@@ -26,4 +30,14 @@ func NewApplication() *fiber.App {
 	router.InstallRouter(app)
 
 	return app
+}
+
+func SetuoLogFile() {
+	logFile, err := os.OpenFile("./logs/simple_messaging_app.log", os.O_CREATE|os.O_APPEND|os.O_RDWR, 0666)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	nw := io.MultiWriter(os.Stdout, logFile)
+	log.SetOutput(nw)
 }

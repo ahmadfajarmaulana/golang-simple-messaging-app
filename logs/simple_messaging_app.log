@@ -1,0 +1,25 @@
+2025/06/30 23:20:59 successfully migrate database
+2025/06/30 23:20:59 successfully connect to mongodb
+2025/06/30 23:21:44 failed to parse jwt token: token has invalid claims: token is expired
+2025/06/30 23:22:24 failed to parse request: invalid character '}' looking for beginning of object key string
+2025/06/30 23:22:36 Failed to validate request:  Key: 'LoginRequest.Password' Error:Field validation for 'Password' failed on the 'required' tag
+2025/06/30 23:52:26 successfully migrate database
+2025/06/30 23:52:26 successfully connect to mongodb
+2025/06/30 23:59:18 successfully migrate database
+2025/06/30 23:59:18 successfully connect to mongodb
+2025/07/01 00:03:57 successfully migrate database
+2025/07/01 00:03:58 successfully connect to mongodb
+2025/07/01 00:08:15 successfully migrate database
+2025/07/01 00:08:15 successfully connect to mongodb
+2025/07/01 00:10:53 failed to compare password : crypto/bcrypt: hashedPassword is not the hash of the given password
+2025/07/01 00:34:39 failed to migrate database: Error 1046 (3D000): No database selected
+2025/07/01 00:34:52 failed to migrate database: Error 1046 (3D000): No database selected
+2025/07/01 00:34:56 failed to migrate database: Error 1046 (3D000): No database selected
+2025/07/01 00:35:04 successfully migrate database
+2025/07/01 00:35:04 successfully connect to mongodb
+2025/07/06 15:05:40 Failed to connect to the Database! 
+Error 1049 (42000): Unknown database 'simple-messaging-app'
+2025/07/06 15:06:06 Failed to connect to the Database! 
+Error 1049 (42000): Unknown database 'simple-messaging-app'
+2025/07/06 15:06:15 successfully migrate database
+2025/07/06 15:06:15 successfully connect to mongodb

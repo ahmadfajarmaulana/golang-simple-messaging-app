@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"fmt"
+	"log"
 	"time"
 
 	"simple-messaging-app/app/models"
@@ -18,20 +19,20 @@ func Register(ctx *fiber.Ctx) error {
 	err := ctx.BodyParser(user)
 	if err != nil {
 		errResponse := fmt.Errorf("failed to parse request: %v", err)
-		fmt.Println(errResponse)
+		log.Println(errResponse)
 		return response.SendErrorResponse(ctx, fiber.StatusInternalServerError, errResponse.Error(), nil)
 	}
 
 	err = user.Validate()
 	if err != nil {
-		fmt.Println("Failed to validate request: ", err)
+		log.Println("Failed to validate request: ", err)
 		return response.SendValidationResponse(ctx, err)
 	}
 
 	hashPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
 	if err != nil {
 		errResponse := fmt.Errorf("failed to endcrypt the password: %v", err)
-		fmt.Println(errResponse)
+		log.Println(errResponse)
 		return response.SendErrorResponse(ctx, fiber.StatusInternalServerError, errResponse.Error(), nil)
 	}
 
@@ -40,7 +41,7 @@ func Register(ctx *fiber.Ctx) error {
 	err = repository.InsertNewUser(ctx.Context(), user)
 	if err != nil {
 		errResponse := fmt.Errorf("failed create data to database: %v", err)
-		fmt.Println(errResponse)
+		log.Println(errResponse)
 		return response.SendErrorResponse(ctx, fiber.StatusInternalServerError, errResponse.Error(), nil)
 	}
 
@@ -56,27 +57,27 @@ func Login(ctx *fiber.Ctx) error {
 	err := ctx.BodyParser(loginRequest)
 	if err != nil {
 		errResponse := fmt.Errorf("failed to parse request: %v", err)
-		fmt.Println(errResponse)
+		log.Println(errResponse)
 		return response.SendErrorResponse(ctx, fiber.StatusInternalServerError, errResponse.Error(), nil)
 	}
 
 	err = loginRequest.Validate()
 	if err != nil {
-		fmt.Println("Failed to validate request: ", err)
+		log.Println("Failed to validate request: ", err)
 		return response.SendValidationResponse(ctx, err)
 	}
 
 	user, err := repository.GetUserByUsername(ctx.Context(), loginRequest.Username)
 	if err != nil {
 		errResponse := fmt.Errorf("failed to get user by username: %v", err)
-		fmt.Println(errResponse)
+		log.Println(errResponse)
 		return response.SendErrorResponse(ctx, fiber.StatusNotFound, errResponse.Error(), nil)
 	}
 
 	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(loginRequest.Password))
 	if err != nil {
 		errResponse := fmt.Errorf("failed to compare password : %v", err)
-		fmt.Println(errResponse)
+		log.Println(errResponse)
 
 		passwordError := map[string]string{
 			"password": "invalid password",
@@ -88,14 +89,14 @@ func Login(ctx *fiber.Ctx) error {
 	token, err := jwt_token.GenerateToken(ctx.Context(), user.Username, user.FullName, "token", now)
 	if err != nil {
 		errResponse := fmt.Errorf("failed to generate token: %v", err)
-		fmt.Println(errResponse)
+		log.Println(errResponse)
 		return response.SendErrorResponse(ctx, fiber.StatusInternalServerError, "internal server error", nil)
 	}
 
 	refreshToken, err := jwt_token.GenerateToken(ctx.Context(), user.Username, user.FullName, "refresh_token", time.Now())
 	if err != nil {
 		errResponse := fmt.Errorf("failed to generate refresh_token: %v", err)
-		fmt.Println(errResponse)
+		log.Println(errResponse)
 		return response.SendErrorResponse(ctx, fiber.StatusInternalServerError, "internal server error", nil)
 	}
 
@@ -110,7 +111,7 @@ func Login(ctx *fiber.Ctx) error {
 	err = repository.InsertNewUserSession(ctx.Context(), userSession)
 	if err != nil {
 		errResponse := fmt.Errorf("failed to insert new user session: %v", err)
-		fmt.Println(errResponse)
+		log.Println(errResponse)
 		return response.SendErrorResponse(ctx, fiber.StatusInternalServerError, errResponse.Error(), nil)
 	}
 
@@ -128,7 +129,7 @@ func Logout(ctx *fiber.Ctx) error {
 	err := repository.DeleteUserSessionByToken(ctx.Context(), token)
 	if err != nil {
 		errResponse := fmt.Errorf("failed to delete user session: %v", err)
-		fmt.Println(errResponse)
+		log.Println(errResponse)
 		return response.SendErrorResponse(ctx, fiber.StatusInternalServerError, "internal server error", nil)
 	}
 
@@ -144,7 +145,7 @@ func RefreshToken(ctx *fiber.Ctx) error {
 	token, err := jwt_token.GenerateToken(ctx.Context(), username, fullname, "token", now)
 	if err != nil {
 		errResponse := fmt.Errorf("failed to generate token: %v", err)
-		fmt.Println(errResponse)
+		log.Println(errResponse)
 		return response.SendErrorResponse(ctx, fiber.StatusInternalServerError, "internal server error", nil)
 	}
 
@@ -152,7 +153,7 @@ func RefreshToken(ctx *fiber.Ctx) error {
 
 	if err != nil {
 		errResponse := fmt.Errorf("failed to update user session token: %v", err)
-		fmt.Println(errResponse)
+		log.Println(errResponse)
 		return response.SendErrorResponse(ctx, fiber.StatusInternalServerError, "internal server error", nil)
 	}
 

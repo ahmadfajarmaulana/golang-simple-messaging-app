@@ -1,7 +1,7 @@
 package router
 
 import (
-	"fmt"
+	"log"
 	"simple-messaging-app/app/repository"
 	"simple-messaging-app/pkg/jwt_token"
 	"simple-messaging-app/pkg/response"
@@ -13,24 +13,24 @@ import (
 func MiddlewareValidateAuth(ctx *fiber.Ctx) error {
 	auth := ctx.Get("authorization")
 	if auth == "" {
-		fmt.Println("authorization is empty")
+		log.Println("authorization is empty")
 		return response.SendErrorResponse(ctx, fiber.StatusUnauthorized, "unauthorized", nil)
 	}
 
 	_, err := repository.GetUserSessionByToken(ctx.Context(), auth)
 	if err != nil {
-		fmt.Println("failed to get user session by token on db: ", err)
+		log.Println("failed to get user session by token on db: ", err)
 		return response.SendErrorResponse(ctx, fiber.StatusUnauthorized, "unauthorized", nil)
 	}
 
 	claim, err := jwt_token.ValidateToken(ctx.Context(), auth)
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 		return response.SendErrorResponse(ctx, fiber.StatusUnauthorized, "unauthorized", nil)
 	}
 
 	if time.Now().Unix() > claim.ExpiresAt.Unix() {
-		fmt.Println("jwt token is expired")
+		log.Println("jwt token is expired")
 		return response.SendErrorResponse(ctx, fiber.StatusUnauthorized, "unauthorized", nil)
 	}
 
@@ -43,18 +43,18 @@ func MiddlewareValidateAuth(ctx *fiber.Ctx) error {
 func MiddlewareRefreshToken(ctx *fiber.Ctx) error {
 	auth := ctx.Get("authorization")
 	if auth == "" {
-		fmt.Println("authorization is empty")
+		log.Println("authorization is empty")
 		return response.SendErrorResponse(ctx, fiber.StatusUnauthorized, "unauthorized", nil)
 	}
 
 	claim, err := jwt_token.ValidateToken(ctx.Context(), auth)
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 		return response.SendErrorResponse(ctx, fiber.StatusUnauthorized, "unauthorized", nil)
 	}
 
 	if time.Now().Unix() > claim.ExpiresAt.Unix() {
-		fmt.Println("jwt token is expired")
+		log.Println("jwt token is expired")
 		return response.SendErrorResponse(ctx, fiber.StatusUnauthorized, "unauthorized", nil)
 	}
 
