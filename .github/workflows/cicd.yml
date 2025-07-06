@@ -27,6 +27,21 @@ jobs:
         run: docker pull fajarrmaulanna/simple-messaging-app:latest
       - name: Delete old docker container
         run: docker rm -f simple-messaging-app
-      - name: Run docker container
-        run: docker run -d -p 8080:8080 -p 4000:4000 --name simple-messaging-app fajarrmaulanna/simple-messaging-app
+      - name: Run Docker container with environment variables
+        run: |
+          docker run -d \
+            -e APP_PORT=${{ secrets.APP_PORT }} \
+            -e APP_HOST=${{ secrets.APP_HOST }} \
+            -e APP_SECRET=${{ secrets.APP_SECRET }} \
+            -e APP_NAME="${{ secrets.APP_NAME }}" \
+            -e DB_HOST=${{ secrets.DB_HOST }} \
+            -e DB_PORT=${{ secrets.DB_PORT }} \
+            -e DB_NAME=${{ secrets.DB_NAME }} \
+            -e DB_USER=${{ secrets.DB_USER }} \
+            -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
+            -e APP_PORT_SOCKET=${{ secrets.APP_PORT_SOCKET }} \
+            -e MONGODB_URI="${{ secrets.MONGODB_URI }}" \
+            -p 8080:8080 -p 4000:4000 \
+            --name simple-messaging-app \
+            fajarrmaulanna/simple-messaging-app:latest
 
